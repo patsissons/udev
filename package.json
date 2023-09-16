@@ -1,0 +1,52 @@
+{
+  "name": "udev",
+  "version": "1.0.0",
+  "description": "μdev CLI tool to simplify development tasks",
+  "private": true,
+  "bin": {
+    "dev": "./bin/dev.js",
+    "devpkg": "./bin/devpkg"
+  },
+  "files": [
+    "dist",
+    "COMMIT"
+  ],
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "prebuild": "npm run clean",
+    "build": "npx tsc && tsc-alias",
+    "clean": "rimraf ./dist",
+    "dev": "ts-node ./src/index.ts",
+    "start": "./bin/dev.js",
+    "lint": "prettier --check . && eslint .",
+    "format": "prettier --write .",
+    "version:patch": "npm version patch --no-git-tag-version && npm run version:commit",
+    "version:minor": "npm version minor --no-git-tag-version && npm run version:commit",
+    "version:commit": "git add package.json && git commit -m \"updating version to ``$(jq -r '.version' package.json)``\"",
+    "run-install": "INSTALL_REMOTE=dev INSTALL_BRANCH=$(git rev-parse --abbrev-ref HEAD) INSTALL_REPO=$(pwd) ./install.sh"
+  },
+  "dependencies": {
+    "chalk": "^4.0.0",
+    "commander": "^10.0.0",
+    "figlet": "^1.5.2",
+    "find-bin": "^1.1.0"
+  },
+  "devDependencies": {
+    "@types/figlet": "^1.5.5",
+    "@types/js-yaml": "^4.0.5",
+    "@types/lodash": "^4.14.192",
+    "@types/node": "^18.11.19",
+    "@typescript-eslint/eslint-plugin": "^5.51.0",
+    "@typescript-eslint/parser": "^5.51.0",
+    "eslint": "^8.33.0",
+    "js-yaml": "^4.1.0",
+    "lodash": "^4.17.21",
+    "package-json-type": "^1.0.3",
+    "prettier": "^2.8.3",
+    "rimraf": "^5.0.0",
+    "ts-node": "^10.9.1",
+    "tsc-alias": "^1.8.6",
+    "tsconfig-paths": "^4.2.0",
+    "typescript": "^4.9.5"
+  }
+}

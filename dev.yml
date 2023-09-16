@@ -1,0 +1,5 @@
+commands:
+  build: pnpm build
+  clean: pnpm clean
+
+open: https://github.com/patsissons/udev#readme
