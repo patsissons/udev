@@ -25,7 +25,7 @@ export async function up(context: Context<RepoUpOptions>) {
     options: { verbose, ...options },
   } = context
 
-  if (!config?.path || !config?.up) {
+  if (!config?.configPath || !config?.up) {
     if (!options.configless) return
 
     return configless()

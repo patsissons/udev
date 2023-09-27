@@ -2,7 +2,7 @@ import chalk from 'chalk'
 import { Command } from 'commander'
 import { textSync } from 'figlet'
 import { commands, type CommandConfig } from './commands'
-import type { GlobalOptions } from './config'
+import { configFileName, type GlobalOptions } from './config'
 import { stringify } from './utils/string'
 import { flagsForOptions } from './utils/flags'
 
@@ -11,6 +11,10 @@ function createProgram() {
 
   return program
     .name('μdev')
+    .option(
+      '--config-path <path>',
+      `path to ${chalk.secondary(configFileName)} config file`
+    )
     .option('-q, --quiet', 'suppress ancillary output')
     .option('-v, --verbose', 'enable verbose output')
     .allowUnknownOption()
@@ -32,7 +36,7 @@ function createProgram() {
       if (verbose) {
         chalk.draw(
           chalk.info(
-            `Running ${chalk.accent(
+            `Running command ${chalk.accent(
               `dev ${program.args.join(' ')} ${flagsForOptions(globals).join(
                 ' '
               )}`

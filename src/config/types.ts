@@ -53,7 +53,7 @@ export interface NukeConfig {
 }
 
 export interface Config {
-  path?: string
+  configPath?: string
   user?: UserConfig
   up?: UpConfig
   down?: DownConfig
@@ -62,7 +62,8 @@ export interface Config {
   open?: string
 }
 
-export interface GlobalOptions extends Record<string, unknown> {
+export interface GlobalOptions {
+  configPath?: string
   quiet?: boolean
   verbose?: boolean
 }

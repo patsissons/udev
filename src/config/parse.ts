@@ -16,7 +16,10 @@ import type {
 } from './types'
 import { configFileName } from './constants'
 
-export function parseConfig({ verbose }: GlobalOptions): Config | undefined {
+export function parseConfig({
+  configPath,
+  verbose,
+}: GlobalOptions): Config | undefined {
   try {
     const config = loadConfig()
 
@@ -94,7 +97,10 @@ export function parseConfig({ verbose }: GlobalOptions): Config | undefined {
   }
 
   function loadConfig(): Config {
-    const userPath = resolve(process.env.HOME || '', `.${configFileName}`)
+    const userPath = resolve(
+      process.env.DEV_HOME || process.env.HOME || '~/',
+      `.${configFileName}`
+    )
     const userYaml = existsSync(userPath)
       ? readFileSync(userPath, 'utf8')
       : undefined
@@ -102,7 +108,7 @@ export function parseConfig({ verbose }: GlobalOptions): Config | undefined {
       ? omitBy(load(userYaml) as UserConfig, isNil)
       : undefined
 
-    const path = resolve(configFileName)
+    const path = resolve(configPath || configFileName)
     const hasConfig = existsSync(path)
     if (!hasConfig) {
       if (verbose) chalk.draw(chalk.warning(`No ${path} found.`))
@@ -117,6 +123,6 @@ export function parseConfig({ verbose }: GlobalOptions): Config | undefined {
       config.user = merge(userConfig, config.user)
     }
 
-    return { path, ...config }
+    return { configPath: path, ...config }
   }
 }
