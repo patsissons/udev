@@ -18,28 +18,7 @@ import { configFileName } from './constants'
 
 export function parseConfig({ verbose }: GlobalOptions): Config | undefined {
   try {
-    const userPath = resolve(process.env.HOME || '', `.${configFileName}`)
-    const userYaml = existsSync(userPath)
-      ? readFileSync(userPath, 'utf8')
-      : undefined
-    const userConfig = userYaml
-      ? omitBy(load(userYaml) as UserConfig, isNil)
-      : undefined
-
-    const path = resolve(configFileName)
-    const hasConfig = existsSync(path)
-    if (!hasConfig) {
-      if (verbose) chalk.draw(chalk.warning(`No ${path} found.`))
-      return userConfig ? { user: userConfig } : undefined
-    }
-
-    if (verbose) chalk.draw(chalk.info.bold(`loading ${path}`))
-    const yaml = readFileSync(path, 'utf8')
-    const config = omitBy(load(yaml) as Config, isNil) as Config
-
-    if (userConfig) {
-      config.user = merge(userConfig, config.user)
-    }
+    const config = loadConfig()
 
     if (!config.up) {
       config.up = {}
@@ -112,5 +91,32 @@ export function parseConfig({ verbose }: GlobalOptions): Config | undefined {
   } catch (error) {
     if (verbose)
       chalk.draw(chalk.error(stringify(error, 'An unknown error occurred.')))
+  }
+
+  function loadConfig(): Config {
+    const userPath = resolve(process.env.HOME || '', `.${configFileName}`)
+    const userYaml = existsSync(userPath)
+      ? readFileSync(userPath, 'utf8')
+      : undefined
+    const userConfig = userYaml
+      ? omitBy(load(userYaml) as UserConfig, isNil)
+      : undefined
+
+    const path = resolve(configFileName)
+    const hasConfig = existsSync(path)
+    if (!hasConfig) {
+      if (verbose) chalk.draw(chalk.warning(`No ${path} found.`))
+      return userConfig ? { user: userConfig } : {}
+    }
+
+    if (verbose) chalk.draw(chalk.info.bold(`loading ${path}`))
+    const yaml = readFileSync(path, 'utf8')
+    const config = omitBy(load(yaml) as Config, isNil) as Config
+
+    if (userConfig) {
+      config.user = merge(userConfig, config.user)
+    }
+
+    return { path, ...config }
   }
 }

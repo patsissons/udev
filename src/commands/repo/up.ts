@@ -16,7 +16,7 @@ export async function up(context: Context) {
     options: { verbose },
   } = context
 
-  if (!config?.up) {
+  if (!config?.path || !config?.up) {
     return configless()
   }
 

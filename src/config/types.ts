@@ -54,6 +54,7 @@ export interface NukeConfig {
 }
 
 export interface Config {
+  path?: string
   user?: UserConfig
   up?: UpConfig
   down?: DownConfig
