@@ -30,7 +30,10 @@ export async function nuke(context: Context<RepoNukeOptions>) {
     }
   }
 
-  if (git && options.git) {
+  // this is the default nuke behaviour, so we only need one of the 2 flags to
+  // be set (either via config or via command line). if config is explicitly set
+  // to false then we omit this step.
+  if (git !== false || options.git) {
     await gitCleanUntracked()
   }
 
