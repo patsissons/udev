@@ -6,17 +6,17 @@ import { load } from 'js-yaml'
 import isNil from 'lodash/isNil'
 import merge from 'lodash/merge'
 import omitBy from 'lodash/omitBy'
-import {
+import type {
   RunnableCommand,
   Config,
   NodePackager,
   UserConfig,
-  Options,
+  GlobalOptions,
 } from './types'
 import { configFileName } from './constants'
 import { stringify } from '@/utils/string'
 
-export function parseConfig({ verbose }: Options): Config | undefined {
+export function parseConfig({ verbose }: GlobalOptions): Config | undefined {
   try {
     const userPath = resolve(process.env.HOME || '', `.${configFileName}`)
     const userYaml = existsSync(userPath)

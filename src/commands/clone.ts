@@ -1,6 +1,7 @@
 import { resolve } from 'path'
 import chalk from 'chalk'
 import { Command } from 'commander'
+import { commandAction, type GlobalOptions } from '@/config'
 import { srcBasePath } from '@/utils/path'
 import {
   CommandAttempt,
@@ -8,15 +9,14 @@ import {
   runConditionalCommands,
 } from '@/utils/runner'
 import type { CommandConfig } from './types'
-import { createContext, Options } from '@/config'
 
-interface CloneOptions extends Options {
+interface CloneOptions extends GlobalOptions {
   replace?: boolean
   http?: boolean
 }
 
-async function handler(this: Command, repo: string, options: CloneOptions) {
-  const context = createContext(this, 'clone', options)
+async function handler(this: Command, repo: string) {
+  const context = commandAction(this, 'clone').createContext<CloneOptions>()
   const {
     options: { http, replace },
   } = context

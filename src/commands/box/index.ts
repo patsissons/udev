@@ -1,6 +1,6 @@
 import chalk from 'chalk'
 import type { Command } from 'commander'
-import { createContext, configFileName, type Options } from '@/config'
+import { commandAction, configFileName } from '@/config'
 import type { CommandConfig } from '@/commands/types'
 import { type Action, actions } from './actions'
 import { down } from './down'
@@ -11,20 +11,8 @@ import { existsSync } from 'fs'
 
 const devboxConfigFileName = 'devbox.json'
 
-async function handler(
-  this: Command,
-  action: string,
-  options: Options
-): Promise<void> {
-  const context = createContext(this, action as Action, options)
-  const {
-    options: { verbose },
-    args,
-  } = context
-
-  if (verbose) {
-    chalk.draw(chalk.info(`Running box ${action} ${args.join(' ')}`))
-  }
+async function handler(this: Command, action: Action) {
+  const context = commandAction(this, action).createContext()
 
   if (!existsSync(devboxConfigFileName)) {
     chalk.draw(

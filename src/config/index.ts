@@ -1,4 +1,4 @@
 export * from './constants'
-export { createContext } from './context'
+export { commandAction } from './context'
 export { parseConfig } from './parse'
 export * from './types'

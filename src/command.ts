@@ -3,12 +3,9 @@ import { commands } from './commands'
 import { CommandConfig } from './commands/types'
 import chalk from 'chalk'
 import { textSync } from 'figlet'
+import type { GlobalOptions } from './config'
 import { stringify } from './utils/string'
-
-interface GlobalOptions {
-  quiet?: boolean
-  verbose?: boolean
-}
+import { flagsForOptions } from './utils/flags'
 
 function createProgram() {
   const program = new Command()
@@ -26,23 +23,42 @@ function createProgram() {
       )
     )
     .hook('preAction', (program) => {
-      if (!program.opts<GlobalOptions>().quiet) {
+      const globals = program.optsWithGlobals<GlobalOptions>()
+      const { quiet, verbose } = globals
+
+      if (!quiet) {
         chalk.draw(`${chalk.primary(textSync('μdev', 'Big'))}\n`)
+      }
+
+      if (verbose) {
+        chalk.draw(
+          chalk.info(
+            `Running ${chalk.accent(
+              `dev ${program.args.join(' ')} ${flagsForOptions(globals).join(
+                ' '
+              )}`
+            )}`
+          )
+        )
       }
     })
     .on(
       'command:*',
-      function (this: Command, [cmd, ...argv]: string[], args: string[]) {
-        const { verbose = false, quiet = false } = this.optsWithGlobals()
-        const flags: string[] = []
-        if (verbose) flags.push('--verbose')
-        if (quiet) flags.push('--quiet')
+      function (this: Command, [cmd, ...argv]: string[], userArgs: string[]) {
+        const globals = this.optsWithGlobals<GlobalOptions>()
+        const flags = flagsForOptions(globals)
 
-        return this.commands
-          .find((c) => c.name() === 'repo')
-          ?.parse([...flags, cmd, '--', ...argv, ...args], {
-            from: 'user',
-          })
+        const inferredArgv = ['repo', cmd, ...flags, ...argv, ...userArgs]
+        if (globals.verbose) {
+          chalk.draw(
+            chalk.info(
+              `Inferring command ${chalk.accent(
+                `dev ${inferredArgv.join(' ')}`
+              )}`
+            )
+          )
+        }
+        this.parse(inferredArgv, { from: 'user' })
       }
     )
 }

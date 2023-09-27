@@ -2,17 +2,17 @@ import { existsSync } from 'fs'
 import { resolve } from 'path'
 import chalk from 'chalk'
 import { Command } from 'commander'
-import type { CommandConfig } from './types'
+import { commandAction, type GlobalOptions } from '@/config'
 import { srcBasePath } from '@/utils/path'
 import { spawnSync } from '@/utils/runner'
-import { createContext, Options } from '@/config'
+import type { CommandConfig } from './types'
 
-interface CdOptions extends Options {
+export interface CdOptions extends GlobalOptions {
   print?: boolean
 }
 
-async function handler(this: Command, repo: string, options: CdOptions) {
-  const context = createContext(this, 'cd', options)
+async function handler(this: Command, repo: string) {
+  const context = commandAction(this, 'cd').createContext<CdOptions>()
   const {
     options: { verbose, print },
   } = context

@@ -1,18 +1,28 @@
 import type { Command } from 'commander'
-import merge from 'lodash/merge'
-import type { Context, Options } from './types'
+import type { Context, GlobalOptions } from './types'
 import { parseConfig } from './parse'
 
-export function createContext<Action, ActionOptions extends Options>(
+export function commandAction<Action extends string>(
   command: Command,
-  action: Action,
-  options: ActionOptions
-): Context<Action, ActionOptions> {
-  return {
+  action: Action
+) {
+  const partial = {
     command,
-    action: action,
-    config: parseConfig(options),
-    options: merge(command.parent?.opts(), options) as ActionOptions,
+    action,
+    // the first argument is the action, so we slice it off
     args: command.args.slice(1),
+  }
+
+  return {
+    ...partial,
+    createContext<Options extends GlobalOptions>(
+      options = command.optsWithGlobals<Options>()
+    ): Context<Options, Action> {
+      return {
+        ...partial,
+        config: parseConfig(options),
+        options,
+      }
+    },
   }
 }

@@ -62,13 +62,14 @@ export interface Config {
   open?: string
 }
 
-export interface Options extends Record<string, unknown> {
+export interface GlobalOptions extends Record<string, unknown> {
+  quiet?: boolean
   verbose?: boolean
 }
 
 export interface Context<
-  Action = string,
-  ActionOptions extends Options = Options
+  ActionOptions extends GlobalOptions = GlobalOptions,
+  Action extends string = string
 > {
   command: Command
   config?: Config
