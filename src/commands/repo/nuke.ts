@@ -1,33 +1,36 @@
 import chalk from 'chalk'
-import type { Context } from '@/config'
+import type { Context, GlobalOptions } from '@/config'
 import { captureCommandAndLog, runCommandAndLog } from './run'
 import { down } from './down'
 
-export async function nuke(context: Context) {
+export interface RepoNukeOptions extends GlobalOptions {
+  process?: boolean
+  containers?: boolean
+  git?: boolean
+}
+
+export async function nuke(context: Context<RepoNukeOptions>) {
   chalk.draw(chalk.info('Stopping stack...'))
   await down(context)
 
-  const { config: { nuke = {} } = {} } = context
+  const { config: { nuke = {} } = {}, options } = context
   const { containers, git, process } = nuke
 
-  if (process) {
+  if (process && options.process) {
     await checkForRunningProcesses(process)
   }
 
-  if (containers) {
-    const {
-      engine = 'docker',
-      name = undefined,
-      prune = undefined,
-    } = containers === true ? {} : containers
-    await stopContainers(engine, name)
+  if (containers && options.containers) {
+    const { name = undefined, prune = undefined } =
+      containers === true ? {} : containers
+    await stopContainers(name)
 
     if (prune) {
       await dockerSystemPrune()
     }
   }
 
-  if (git) {
+  if (git && options.git) {
     await gitCleanUntracked()
   }
 
@@ -59,7 +62,7 @@ export async function nuke(context: Context) {
     }
   }
 
-  async function stopContainers(engine: string, name?: string) {
+  async function stopContainers(name?: string) {
     chalk.draw(chalk.info('Stopping all remaining containers...'))
     const { output: containerIds } = await captureCommandAndLog(
       context,
@@ -71,7 +74,7 @@ export async function nuke(context: Context) {
     }
 
     chalk.draw(chalk.info('Checking for zombie containers...'))
-    let processFilter = `[${engine[0]}]${engine.slice(1)}`
+    let processFilter = `[d]ocker`
     if (name) {
       processFilter += `|${name}`
     }

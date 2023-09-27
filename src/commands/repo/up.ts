@@ -7,34 +7,45 @@ import type {
   HostsConfig,
   NodeConfig,
   NodePackager,
+  GlobalOptions,
 } from '@/config'
 import { captureCommandAndLog, runCommandAndLog, runStep } from './run'
 
-export async function up(context: Context) {
+export interface RepoUpOptions extends GlobalOptions {
+  configless?: boolean
+  hosts?: boolean
+  docker?: boolean
+  brew?: boolean
+  node?: boolean
+}
+
+export async function up(context: Context<RepoUpOptions>) {
   const {
     config,
-    options: { verbose },
+    options: { verbose, ...options },
   } = context
 
   if (!config?.path || !config?.up) {
+    if (!options.configless) return
+
     return configless()
   }
 
   const { brew, docker, hosts, node, steps } = config.up
 
-  if (hosts) {
+  if (hosts && options.hosts) {
     await processHosts(hosts)
   }
 
-  if (docker) {
+  if (docker && options.docker) {
     await processDocker(docker)
   }
 
-  if (brew) {
+  if (brew && options.brew) {
     await processBrew(brew)
   }
 
-  if (node) {
+  if (node && options.node) {
     await processNode(node)
   }
 

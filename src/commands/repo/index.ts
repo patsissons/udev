@@ -4,13 +4,15 @@ import { commandAction, configFileName } from '@/config'
 import type { CommandConfig } from '@/commands/types'
 import { type Action, actions } from './actions'
 import { down } from './down'
-import { nuke } from './nuke'
+import { type RepoNukeOptions, nuke } from './nuke'
 import { open } from './open'
 import { run } from './run'
-import { up } from './up'
+import { type RepoUpOptions, up } from './up'
+
+export type RepoOptions = RepoUpOptions | RepoNukeOptions
 
 async function handler(this: Command, action: Action) {
-  const context = commandAction(this, action).createContext()
+  const context = commandAction(this, action).createContext<RepoOptions>()
 
   switch (context.action) {
     case 'up':
@@ -35,7 +37,38 @@ export const repo: CommandConfig = (program: Command) => {
         configFileName
       )} file`
     )
-    .option('-v, --verbose', 'prints commands being run')
+    .option(
+      '-C, --no-configless',
+      `${chalk.accent.bold('up')}: disables running in configless mode`
+    )
+    .option(
+      '-H, --no-hosts',
+      `${chalk.accent.bold('up')}: omits patching hosts`
+    )
+    .option(
+      '-D, --no-docker',
+      `${chalk.accent.bold('up')}: omits initializing docker`
+    )
+    .option(
+      '-B, --no-brew',
+      `${chalk.accent.bold('up')}: omits running brew commands`
+    )
+    .option(
+      '-N, --no-node',
+      `${chalk.accent.bold('up')}: omits setting up node`
+    )
+    .option(
+      '-P, --no-process',
+      `${chalk.accent.bold('nuke')}: omits checking for running processes`
+    )
+    .option(
+      '-PC, --no-container',
+      `${chalk.accent.bold('nuke')}: omits prunning running containers`
+    )
+    .option(
+      '-G, --no-git',
+      `${chalk.accent.bold('nuke')}: omits cleaning untracked git files`
+    )
     .allowUnknownOption()
     .argument(
       '<action>',

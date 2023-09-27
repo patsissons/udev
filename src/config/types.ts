@@ -45,7 +45,6 @@ export interface NukeConfig {
   process?: string
   containers?:
     | {
-        engine?: string
         name?: string
         prune?: boolean
       }
