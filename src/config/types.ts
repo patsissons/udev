@@ -55,7 +55,7 @@ export interface NukeConfig {
 export interface Config {
   configPath?: string
   user?: UserConfig
-  up?: UpConfig
+  up: UpConfig
   down?: DownConfig
   nuke?: NukeConfig
   commands?: Record<string, RunnableCommand>
@@ -73,7 +73,7 @@ export interface Context<
   Action extends string = string
 > {
   command: Command
-  config?: Config
+  config: Config
   action: Action
   options: ActionOptions
   args: string[]

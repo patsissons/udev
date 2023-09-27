@@ -25,13 +25,13 @@ export async function up(context: Context<RepoUpOptions>) {
     options: { verbose, ...options },
   } = context
 
-  if (!config?.configPath || !config?.up) {
+  const { brew, docker, hosts, node, steps } = config.up
+
+  if (!config.configPath) {
     if (!options.configless) return
 
-    return configless()
+    return configless(node)
   }
-
-  const { brew, docker, hosts, node, steps } = config.up
 
   if (hosts && options.hosts) {
     await processHosts(hosts)
@@ -86,9 +86,9 @@ export async function up(context: Context<RepoUpOptions>) {
     }
   }
 
-  async function configless() {
-    await installNode()
-    await installPackages()
+  async function configless({ version, packager }: NodeConfig = {}) {
+    await installNode(version)
+    await installPackages(packager)
   }
 
   async function processDocker({}: DockerConfig) {

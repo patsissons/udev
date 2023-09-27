@@ -16,10 +16,7 @@ import type {
 } from './types'
 import { configFileName } from './constants'
 
-export function parseConfig({
-  configPath,
-  verbose,
-}: GlobalOptions): Config | undefined {
+export function parseConfig({ configPath, verbose }: GlobalOptions): Config {
   try {
     const config = loadConfig()
 
@@ -90,13 +87,15 @@ export function parseConfig({
       }
     }
 
-    return config
+    return config as Config
   } catch (error) {
     if (verbose)
       chalk.draw(chalk.error(stringify(error, 'An unknown error occurred.')))
+
+    throw error
   }
 
-  function loadConfig(): Config {
+  function loadConfig(): Partial<Config> {
     const userPath = resolve(
       process.env.DEV_HOME || process.env.HOME || '~/',
       `.${configFileName}`
