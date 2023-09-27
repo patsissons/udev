@@ -16,7 +16,11 @@ async function handler(this: Command, action: Action) {
 
   if (!existsSync(devboxConfigFileName)) {
     chalk.draw(
-      chalk.error(`No devbox config file found at ${devboxConfigFileName}.`)
+      chalk.error(
+        `No devbox config file found at ${chalk.secondary(
+          devboxConfigFileName
+        )}.`
+      )
     )
     return
   }

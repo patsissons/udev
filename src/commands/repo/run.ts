@@ -12,14 +12,18 @@ export async function run(context: Context) {
   }
 
   if (!config) {
-    chalk.draw(chalk.error(`No config file found at ${configFileName}.`))
+    chalk.draw(
+      chalk.error(`No config file found at ${chalk.secondary(configFileName)}.`)
+    )
     return
   }
 
   const { commands } = config
 
   if (!commands) {
-    chalk.draw(chalk.error(`No commands found in ${configFileName}.`))
+    chalk.draw(
+      chalk.error(`No commands found in ${chalk.secondary(configFileName)}.`)
+    )
     return
   }
 
@@ -27,7 +31,9 @@ export async function run(context: Context) {
   if (!cmd) {
     chalk.draw(
       chalk.error(
-        `Command ${chalk.primary.bold(name)} not found in ${configFileName}.`
+        `Command ${chalk.primary.bold(name)} not found in ${chalk.secondary(
+          configFileName
+        )}.`
       )
     )
     return
