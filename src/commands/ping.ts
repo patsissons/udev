@@ -1,5 +1,5 @@
 import chalk from 'chalk'
-import { Command } from 'commander'
+import type { Command } from 'commander'
 import type { CommandConfig } from './types'
 
 export const ping: CommandConfig = (program: Command) => {

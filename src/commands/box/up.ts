@@ -1,12 +1,11 @@
 import chalk from 'chalk'
 import { lookpathSync } from 'find-bin'
-import { Context } from '@/config'
+import type { Context } from '@/config'
 
 export async function up(context: Context) {
   chalk.draw(chalk.warning('Not yet implemented'))
 
   const {
-    config,
     options: { verbose },
   } = context
 

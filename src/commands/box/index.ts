@@ -1,3 +1,4 @@
+import { existsSync } from 'fs'
 import chalk from 'chalk'
 import type { Command } from 'commander'
 import { commandAction, configFileName } from '@/config'
@@ -7,7 +8,6 @@ import { down } from './down'
 import { nuke } from './nuke'
 import { run } from './run'
 import { up } from './up'
-import { existsSync } from 'fs'
 
 const devboxConfigFileName = 'devbox.json'
 

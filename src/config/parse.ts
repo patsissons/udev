@@ -1,11 +1,12 @@
 import { existsSync, readFileSync } from 'fs'
 import { resolve } from 'path'
-import { IPackageJson } from 'package-json-type'
+import type { IPackageJson } from 'package-json-type'
 import chalk from 'chalk'
 import { load } from 'js-yaml'
 import isNil from 'lodash/isNil'
 import merge from 'lodash/merge'
 import omitBy from 'lodash/omitBy'
+import { stringify } from '@/utils/string'
 import type {
   RunnableCommand,
   Config,
@@ -14,7 +15,6 @@ import type {
   GlobalOptions,
 } from './types'
 import { configFileName } from './constants'
-import { stringify } from '@/utils/string'
 
 export function parseConfig({ verbose }: GlobalOptions): Config | undefined {
   try {

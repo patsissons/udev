@@ -1,7 +1,7 @@
 import { readFileSync, existsSync } from 'fs'
 import { resolve } from 'path'
 import chalk from 'chalk'
-import { Command } from 'commander'
+import type { Command } from 'commander'
 import type { CommandConfig } from './types'
 
 const packagePath = resolve(__dirname, '../../package.json')

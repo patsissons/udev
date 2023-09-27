@@ -1,10 +1,10 @@
 import { resolve } from 'path'
 import chalk from 'chalk'
-import { Command } from 'commander'
+import type { Command } from 'commander'
 import { commandAction, type GlobalOptions } from '@/config'
 import { srcBasePath } from '@/utils/path'
 import {
-  CommandAttempt,
+  type CommandAttempt,
   logCommandAttempt,
   runConditionalCommands,
 } from '@/utils/runner'

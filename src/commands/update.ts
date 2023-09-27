@@ -1,7 +1,7 @@
 import { existsSync } from 'fs'
 import { resolve } from 'path'
 import chalk from 'chalk'
-import { Command } from 'commander'
+import type { Command } from 'commander'
 import { runCommandAndLog } from '@/utils/runner'
 import type { CommandConfig } from './types'
 

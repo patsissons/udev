@@ -7,6 +7,8 @@ import { CommandConfig } from './types'
 import { update } from './update'
 import { version } from './version'
 
+export * from './types'
+
 export const commands: Record<string, CommandConfig> = {
   box,
   cd,

@@ -1,5 +1,5 @@
 import chalk from 'chalk'
-import { exec, ExecException, spawn, spawnSync } from 'child_process'
+import { exec, type ExecException, spawn, spawnSync } from 'child_process'
 import { stringify } from './string'
 
 export interface RunCommandOptions {
