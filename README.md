@@ -120,6 +120,13 @@ Emits the current version of the tool
 
 ### Infrastructure
 
-- All commands live in `src/commands` as their own file, see `clone` for a good example to template from.
+- All commands live in `src/commands` as their own file or directory
+  - see `clone` for a good example to template from for a simple command.
+  - see `repo` for a good example to template from for a sub-action based command.
 - `chalk` provides a simple entry point to emitting content with styles from any command
 - `runCommand`, `runCommands`, and `runConditionalCommands` simply executing commands
+
+### Testing
+
+- use `pnpm run-install` to install `dev` from local source
+  - note that you need to commit any changes first as the installation will simulate a clone from your local repository
