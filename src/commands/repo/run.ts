@@ -168,13 +168,16 @@ export async function spawnCommandAndLog(
       if (typeof data !== 'string') return
       if (silent) return
 
-      const text = data.trim()
-      if (!text || text === 'undefined' || text === 'null') return
+      let trimmed = data.trim()
+      if (!trimmed || trimmed === 'undefined' || trimmed === 'null') return
 
+      // we only care about removing the final newline since our chalk drawer
+      // will append its own newline
+      trimmed = data.replace(/\r?\n$/, '')
       if (onStdOut) {
-        onStdOut(text)
+        onStdOut(trimmed)
       } else {
-        chalk.draw('\n', chalk.info(text))
+        chalk.draw(trimmed)
       }
     })
     child.stderr.on('data', (data) => {
@@ -182,13 +185,16 @@ export async function spawnCommandAndLog(
       if (typeof data !== 'string') return
       if (silent) return
 
-      const text = data.trim()
-      if (!text) return
+      let trimmed = data.trim()
+      if (!trimmed || trimmed === 'undefined' || trimmed === 'null') return
 
+      // we only care about removing the final newline since our chalk drawer
+      // will append its own newline
+      trimmed = data.replace(/\r?\n$/, '')
       if (onStdErr) {
-        onStdErr(text)
+        onStdErr(trimmed)
       } else {
-        chalk.draw('\n', chalk.error(text))
+        chalk.error.draw(trimmed)
       }
     })
     child.on('error', (error) => {
