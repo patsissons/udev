@@ -194,7 +194,7 @@ export async function spawnCommandAndLog(
       if (onStdErr) {
         onStdErr(trimmed)
       } else {
-        chalk.error.draw(trimmed)
+        chalk.draw(chalk.error(trimmed))
       }
     })
     child.on('error', (error) => {
