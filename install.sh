@@ -4,7 +4,7 @@
 
 INSTALL_HOME=${INSTALL_HOME:-/usr/local/lib}
 INSTALL_PATH=${INSTALL_PATH:-${INSTALL_HOME}/udev}
-INSTALL_REPO=${INSTALL_REPO:-git@github.com:patsissons/udev.git}
+INSTALL_REPO=${INSTALL_REPO:-https://github.com/patsissons/udev.git}
 INSTALL_REMOTE=${INSTALL_REMOTE:-origin}
 INSTALL_BRANCH=${INSTALL_BRANCH:-main}
 INSTALL_MODE=upgrade
