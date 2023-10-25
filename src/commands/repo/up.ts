@@ -163,11 +163,18 @@ export async function up(context: Context<RepoUpOptions>) {
   async function installNode(version?: string | number) {
     if (version) {
       if (verbose) {
-        chalk.draw(
-          chalk.warning(chalk.bold(`[WIP] Installing node ${version}`))
-        )
+        chalk.draw(chalk.warning(chalk.bold(`Installing node ${version}`)))
       }
-      // TODO: actually install node version
+
+      await runNvm('install', String(version))
+      await runNvm('use', String(version))
+    }
+
+    function runNvm(...args: string[]) {
+      return runCommandAndLog(
+        context,
+        `source $NVM_DIR/nvm.sh && nvm ${args.join(' ')}`
+      )
     }
   }
 
