@@ -30,7 +30,15 @@ export async function up(context: Context<RepoUpOptions>) {
   if (!config.configPath) {
     if (!options.configless) return
 
-    return configless(node)
+    if (options.brew) {
+      await processBrew(brew)
+    }
+
+    if (node && options.node) {
+      await processNode(node)
+    }
+
+    return
   }
 
   if (hosts && options.hosts) {
@@ -41,7 +49,7 @@ export async function up(context: Context<RepoUpOptions>) {
     await processDocker(docker)
   }
 
-  if (brew && options.brew) {
+  if (options.brew) {
     await processBrew(brew)
   }
 
@@ -86,18 +94,13 @@ export async function up(context: Context<RepoUpOptions>) {
     }
   }
 
-  async function configless({ version, packager }: NodeConfig = {}) {
-    await installNode(version)
-    await installPackages(packager)
-  }
-
   async function processDocker({}: DockerConfig) {
     // TODO: Check if docker is installed
     // TODO: Check if docker is running
     // TODO: Check if docker is correct version
   }
 
-  async function processBrew({ install = [], cask }: BrewConfig) {
+  async function processBrew({ install = [], cask }: BrewConfig = {}) {
     if (!lookpathSync('brew')) {
       chalk.draw(chalk.warning('Homebrew not found, skipping brew installs'))
       return
